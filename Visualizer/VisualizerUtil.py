@@ -11,7 +11,10 @@ plotly_apikey=config['PLOTLY']['plotly_apikey']
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASIC_HEATMAP_PATH = BASE_DIR+'/templates/heatmap.html'
+TEMPLATE_DIR = BASE_DIR + '/templates/'
+BASIC_HEATMAP_PATH = TEMPLATE_DIR+'heatmap.html'
+BASIC_BARCHART_PATH = TEMPLATE_DIR+'barchart.html'
+BASIC_PREC_RECALL_PATH = TEMPLATE_DIR+'prec_rec.html'
 
 try:
     import plotly
@@ -25,6 +28,20 @@ try:
     plotly.tools.set_credentials_file(username=plotly_username, api_key=plotly_apikey)
 except:
     print('Not installed plotly')
+
+def _import():
+    try:
+        import plotly
+        import plotly.plotly as py
+        import plotly.tools as tls
+        import plotly.graph_objs as go
+        from plotly import __version__
+        from plotly.offline import plot
+        import plotly.graph_objs as go
+        print(__version__)
+        plotly.tools.set_credentials_file(username=plotly_username, api_key=plotly_apikey)
+    except:
+        print('Not installed plotly')
 
 def genPlotlyHeatmap(matrix, x_label_list, y_label_list, path = None):
     import numpy as np
@@ -40,6 +57,90 @@ def genPlotlyHeatmap(matrix, x_label_list, y_label_list, path = None):
     else:
         _filename = path
     plot(data, filename=_filename, auto_open=False)
+
+def genPlotly1DBarChart(labels, data, layout=None, path = None, width_size = 1):
+
+    _width = [width_size for i in range(len(labels))]
+    if len(labels) != len(data):
+        raise ValueError("length of labels and length of data must be same")
+    trace = go.Bar(x=labels, y=data, width=_width)
+    data = [trace]
+    if path == None:
+        _filename = BASIC_BARCHART_PATH
+    else:
+        _filename = TEMPLATE_DIR+path
+    if layout is not None:
+        _layout = go.Layout(layout)
+    else:
+        _layout = go.Layout()
+
+    plot(go.Figure(data=data, layout=_layout), filename=_filename, auto_open=False)
+
+
+def gen_params_prec_recall_curve(params, precs_all, precs_selected,
+                              recalls_all, recalls_selected, F1Scores_all, F1Score_selected, _filename=BASIC_PREC_RECALL_PATH):
+    fig = tls.make_subplots(rows=2, cols=2, specs=[[{}, {}],
+                                               [{}, None], ],
+                        subplot_titles=('Precision',
+                                        'Recalls',
+                                        'F1-Score',))
+
+
+    trace_precs_all = go.Scatter(
+        x=params, y=precs_all,
+        mode = 'lines+markers',
+        marker=dict(color="red",),
+        name="All"
+    )
+
+    trace_precs_selected = go.Scatter(
+        x=params, y=precs_selected,
+        mode='lines+markers',
+        marker=dict(color="blue", ),
+        name="Selected"
+    )
+
+
+    trace_rec_all = go.Scatter(
+        x=params, y=recalls_all,
+        mode='lines+markers',
+        marker=dict(color="red", ),
+        name="All"
+    )
+
+    trace_rec_selected = go.Scatter(
+        x=params, y=recalls_selected,
+        mode='lines+markers',
+        marker=dict(color="blue", ),
+        name="Selected"
+    )
+
+    trace_f1_all = go.Scatter(
+        x=params, y=F1Scores_all,
+        mode='lines+markers',
+        marker=dict(color="red", ),
+        name="All"
+    )
+
+    trace_f1_selected = go.Scatter(
+        x=params, y=F1Score_selected,
+        mode='lines+markers',
+        marker=dict(color="blue", ),
+        name="Selected"
+    )
+
+    fig.append_trace(trace_precs_all, 1, 1)
+    fig.append_trace(trace_precs_selected, 1, 1)
+    fig.append_trace(trace_rec_all, 1, 2)
+    fig.append_trace(trace_rec_selected, 1, 2)
+    fig.append_trace(trace_f1_all, 2, 1)
+    fig.append_trace(trace_f1_selected, 2, 1)
+
+    fig['layout']['xaxis1'].update(title='threshold')
+    fig['layout']['xaxis1'].update(title='threshold')
+    fig['layout']['xaxis1'].update(title='threshold')
+
+    plot(fig, filename=_filename, auto_open=False)
 
 if __name__ == "__main__":
     import numpy as np

@@ -1,5 +1,6 @@
 import sys
-KEYCONFIG_FILE_PATH = './APIKeys.ini'
+import os
+KEYCONFIG_FILE_PATH = BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/util/APIKeys.ini'
 
 
 if sys.version_info[0] == 2:
