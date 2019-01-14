@@ -1,47 +1,8 @@
 
 
-###
-import util.configurations as config
 
-config = config.parser()
-plotly_username=config['PLOTLY']['plotly_username']
-plotly_apikey=config['PLOTLY']['plotly_apikey']
-###
+from Visualizer.importPlotly import *
 
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = BASE_DIR + '/templates/'
-BASIC_HEATMAP_PATH = TEMPLATE_DIR+'heatmap.html'
-BASIC_BARCHART_PATH = TEMPLATE_DIR+'barchart.html'
-BASIC_PREC_RECALL_PATH = TEMPLATE_DIR+'prec_rec.html'
-
-try:
-    import plotly
-    import plotly.plotly as py
-    import plotly.tools as tls
-    import plotly.graph_objs as go
-    from plotly import __version__
-    from plotly.offline import plot
-    import plotly.graph_objs as go
-    print(__version__)
-    plotly.tools.set_credentials_file(username=plotly_username, api_key=plotly_apikey)
-except:
-    print('Not installed plotly')
-
-def _import():
-    try:
-        import plotly
-        import plotly.plotly as py
-        import plotly.tools as tls
-        import plotly.graph_objs as go
-        from plotly import __version__
-        from plotly.offline import plot
-        import plotly.graph_objs as go
-        print(__version__)
-        plotly.tools.set_credentials_file(username=plotly_username, api_key=plotly_apikey)
-    except:
-        print('Not installed plotly')
 
 def genPlotlyHeatmap(matrix, x_label_list, y_label_list, path = None):
     import numpy as np

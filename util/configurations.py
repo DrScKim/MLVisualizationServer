@@ -19,8 +19,6 @@ def parser():
         raise FileNotFoundError('DOES NOT EXIST CONFIG FILE!')
     return config
 
-
-
 if __name__ == "__main__":
     config = parser()
     print(config['PLOTLY']['plotly_username'])

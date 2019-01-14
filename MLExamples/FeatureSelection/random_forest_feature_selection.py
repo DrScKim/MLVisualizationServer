@@ -101,5 +101,5 @@ def visualizePreRecallByParams(n_estims=1000):
     vis.gen_params_prec_recall_curve(thr_labels, allFeat['prec'], selected['prec'],
                                          allFeat['rec'], selected['rec'], allFeat['f1'], selected['f1'])
 
-#run(True)
-visualizePreRecallByParams()
+run(True)
+#visualizePreRecallByParams()
