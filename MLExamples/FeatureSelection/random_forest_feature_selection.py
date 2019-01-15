@@ -57,9 +57,6 @@ def train_test_selected_features(model, X_train, X_test, Y_train, Y_test, n_esti
 
     return selected_feature_result
 
-
-
-
 def visualizePreRecallByParams(n_estims=1000):
 
     wine_data, X_train, X_test, Y_train, Y_test = data_load_n_split_train_test(0.5)
