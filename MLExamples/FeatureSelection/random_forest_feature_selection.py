@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.model_selection import train_test_split
 import numpy as np
+from util.durationLog import *
 
 def data_load_n_split_train_test(ratio = 0.25):
     wine_data = load_wine()
@@ -38,6 +39,11 @@ def train_all_features():
     wine_data, X_train, X_test, Y_train, Y_test = data_load_n_split_train_test()
 
     pass
+@calc_duration
+def train(model, train_data, train_label):
+    model.fit(train_data, train_label)
+
+
 
 def train_test_selected_features(model, X_train, X_test, Y_train, Y_test, n_estims=1000, thr = 0.1, isConsoleDubug=True):
     from sklearn.feature_selection import SelectFromModel
@@ -46,8 +52,7 @@ def train_test_selected_features(model, X_train, X_test, Y_train, Y_test, n_esti
     X_selected_train = sfm.transform(X_train)
     X_selected_test = sfm.transform(X_test)
     selectedForest = RandomForestClassifier(n_estimators=n_estims, random_state=0, n_jobs=-1)
-
-    selectedForest.fit(X_selected_train, Y_train)
+    train(selectedForest, X_selected_train, Y_train)
     y_selected_pred = selectedForest.predict(X_selected_test)
 
     selected_feature_result = precision_recall_fscore_support(Y_test, y_selected_pred, average='weighted')
@@ -59,9 +64,9 @@ def train_test_selected_features(model, X_train, X_test, Y_train, Y_test, n_esti
 
 def visualizePreRecallByParams(n_estims=1000):
 
-    wine_data, X_train, X_test, Y_train, Y_test = data_load_n_split_train_test(0.5)
+    wine_data, X_train, X_test, Y_train, Y_test = data_load_n_split_train_test(0.4)
     forest = RandomForestClassifier(n_estimators=n_estims, random_state=0, n_jobs=-1)
-    forest.fit(X_train, Y_train)
+    train(forest, X_train, Y_train)
     y_pred = forest.predict(X_test)
     all_feature_result = precision_recall_fscore_support(Y_test, y_pred, average='weighted')
     importances = forest.feature_importances_
@@ -85,7 +90,7 @@ def visualizePreRecallByParams(n_estims=1000):
     selected['f1']=list()
 
     for thr in thr_labels:
-        selected_feature_result = train_test_selected_features(forest, X_train, X_test, Y_train, Y_test, n_estims, thr, False)
+        selected_feature_result = train_test_selected_features(forest, X_train, X_test, Y_train, Y_test, int(n_estims), thr, True)
         allFeat['prec'].append(all_feature_result[0])
         allFeat['rec'].append(all_feature_result[1])
         allFeat['f1'].append(all_feature_result[2])
@@ -98,5 +103,5 @@ def visualizePreRecallByParams(n_estims=1000):
     vis.gen_params_prec_recall_curve(thr_labels, allFeat['prec'], selected['prec'],
                                          allFeat['rec'], selected['rec'], allFeat['f1'], selected['f1'])
 
-run(True)
-#visualizePreRecallByParams()
+#run(False)
+visualizePreRecallByParams(250)
