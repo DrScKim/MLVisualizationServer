@@ -16,7 +16,6 @@ def test_removeRow_containNaN(npArray):
     print(processed_data)
 
 def impute_NaN(npArray, _strategy='mean'):
-
     from sklearn.impute import SimpleImputer
     imputer = SimpleImputer(missing_values=np.nan, strategy=_strategy, verbose=0)
     imputer = imputer.fit(npArray)
