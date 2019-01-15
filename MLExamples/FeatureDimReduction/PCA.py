@@ -4,10 +4,11 @@ import numpy as np
 from util.durationLog import *
 from MLExamples.util.dataLoader import *
 from MLExamples.FeatureSelection.random_forest_feature_selection import *
-
+from MLExamples.util.train_test_module import *
 
 def visualizePreRecallByParams(n_estims=1000, n=5):
     wine_data, X_train, X_test, Y_train, Y_test = wine_data_load_n_split_train_test(0.25)
+    X_train, X_test = standarizer(X_train, X_test)
     KNN = KNeighborsClassifier(n_neighbors=n)
     train(KNN, X_train, Y_train)
     y_pred = KNN.predict(X_test)
@@ -19,9 +20,9 @@ def visualizePreRecallByParams(n_estims=1000, n=5):
     thr_labels = [2*i+1 for i in range(len(wine_data.feature_names)>>1)]
     allFeat = dict()
     selected = dict()
-    allFeat['prec'] = list()
-    allFeat['rec'] = list()
-    allFeat['f1'] = list()
+    allFeat['prec'] = [ all_feature_result[0]] * len(thr_labels)
+    allFeat['rec'] =  [ all_feature_result[1]] * len(thr_labels)
+    allFeat['f1'] =  [ all_feature_result[2]] * len(thr_labels)
     selected['prec']=list()
     selected['rec']=list()
     selected['f1']=list()
@@ -35,9 +36,6 @@ def visualizePreRecallByParams(n_estims=1000, n=5):
         X_selected_test = X_spca.transform(X_test)
         model = KNeighborsClassifier(n_neighbors=n)
         selected_feature_result = train_test_selected_features(model, X_selected_train, X_selected_test, Y_train, Y_test, True)
-        allFeat['prec'].append(all_feature_result[0])
-        allFeat['rec'].append(all_feature_result[1])
-        allFeat['f1'].append(all_feature_result[2])
         selected['prec'].append(selected_feature_result[0])
         selected['rec'].append(selected_feature_result[1])
         selected['f1'].append(selected_feature_result[2])
