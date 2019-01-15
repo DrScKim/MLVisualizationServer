@@ -6,7 +6,7 @@
 *.ini
 *.json
 *.key
-.util/*.ini
+util/*.ini
 
 # User-specific stuff
 .idea/**/workspace.xml
