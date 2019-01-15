@@ -11,6 +11,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('heatmap', views.heatmap, name='heatmap'),
     path('rfFeatSelectionPrecRec', views.rf_feat_selection_precision_recall, name='rfFeatSelectionPrecRec'),
-    path('rfFeatImportance', views.rf_feature_importance, name='rfFeatImportance')
+    path('rfFeatImportance', views.rf_feature_importance, name='rfFeatImportance'),
+    path('rfFeatDimReducPrecRec', views.pca_dim_reduction_precision_recall, name = 'rfFeatDimReducPrecRec'),
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

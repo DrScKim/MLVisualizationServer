@@ -16,4 +16,8 @@ def rf_feat_selection_precision_recall(request):
 def rf_feature_importance(request):
     template = loader.get_template("featureEngineering/barchart.html")
     return HttpResponse(template.render())
+
+def pca_dim_reduction_precision_recall(request):
+    template = loader.get_template("featureEngineering/prec_rec_by_pca.html")
+    return HttpResponse(template.render())
 # Create your views here.

@@ -16,6 +16,7 @@ BASIC_HEATMAP_PATH = TEMPLATE_DIR+'heatmap.html'
 BASIC_BARCHART_PATH = TEMPLATE_DIR+'/featureEngineering/featureImportance.html'
 BASIC_PREC_RECALL_PATH = TEMPLATE_DIR+'/featureEngineering/prec_rec.html'
 
+
 try:
     import plotly
     import plotly.plotly as py
