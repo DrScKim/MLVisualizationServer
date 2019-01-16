@@ -15,7 +15,7 @@ TEMPLATE_DIR = BASE_DIR + '/templates/'
 BASIC_HEATMAP_PATH = TEMPLATE_DIR+'heatmap.html'
 BASIC_BARCHART_PATH = TEMPLATE_DIR+'/featureEngineering/featureImportance.html'
 BASIC_PREC_RECALL_PATH = TEMPLATE_DIR+'/featureEngineering/prec_rec.html'
-
+BASIC_LINE_CHART_PATH = TEMPLATE_DIR+'/featureEngineering/line_chart.html'
 
 try:
     import plotly

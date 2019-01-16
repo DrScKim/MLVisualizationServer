@@ -37,6 +37,27 @@ def genPlotly1DBarChart(labels, data, layout=None, path = None, width_size = 1):
 
     plot(go.Figure(data=data, layout=_layout), filename=_filename, auto_open=False)
 
+def genPlotlyMultiLineChart(labels, datas, _layout=None, _filename='', width_size = 1, colors = None, names= None):
+    if len(_filename) == 0:
+        raise ValueError('_filename must be filled')
+    if colors is not None:
+        if len(datas) != len(colors):
+            raise ValueError("lenght of data and color must be same or colors input as None")
+    traces = []
+    for i, data in enumerate(datas):
+        trace = go.Scatter(
+            x = labels,
+            y = data,
+            mode = 'lines',
+        )
+        if colors is not None:
+            trace['line']['color']=colors[i]
+        if names is not None:
+            trace['name'] = names[i]
+        traces.append(trace)
+    data = [traces]
+
+    plot(go.Figure(data=traces, layout=_layout), filename=_filename, auto_open=False)
 
 def gen_params_prec_recall_curve(params, precs_all, precs_selected,
                               recalls_all, recalls_selected, F1Scores_all, F1Score_selected, _filename=BASIC_PREC_RECALL_PATH):
