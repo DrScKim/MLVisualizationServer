@@ -10,7 +10,7 @@ def visualizePreRecallByParams(n_estims=1000, n=5):
     wine_data, X_train, X_test, Y_train, Y_test = wine_data_load_n_split_train_test(0.25)
     X_train, X_test = standarizer(X_train, X_test)
     KNN = KNeighborsClassifier(n_neighbors=n)
-    train(KNN, X_train, Y_train)
+    train_calc_time(KNN, X_train, Y_train)
     y_pred = KNN.predict(X_test)
     all_feature_result = precision_recall_fscore_support(Y_test, y_pred, average='weighted')
 
