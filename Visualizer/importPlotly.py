@@ -16,6 +16,7 @@ BASIC_HEATMAP_PATH = TEMPLATE_DIR+'heatmap.html'
 BASIC_BARCHART_PATH = TEMPLATE_DIR+'/featureEngineering/featureImportance.html'
 BASIC_PREC_RECALL_PATH = TEMPLATE_DIR+'/featureEngineering/prec_rec.html'
 BASIC_LINE_CHART_PATH = TEMPLATE_DIR+'/featureEngineering/line_chart.html'
+BASIC_DOT_PLOT_PATH = TEMPLATE_DIR+'/featureEngineering/dot_plot.html'
 
 try:
     import plotly
@@ -26,5 +27,6 @@ try:
     from plotly.offline import plot
     print(__version__)
     plotly.tools.set_credentials_file(username=plotly_username, api_key=plotly_apikey)
+    import numpy as np
 except:
     print('Not installed plotly')

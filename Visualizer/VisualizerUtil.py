@@ -1,6 +1,3 @@
-
-
-
 from Visualizer.importPlotly import *
 
 
@@ -37,6 +34,46 @@ def genPlotly1DBarChart(labels, data, layout=None, path = None, width_size = 1):
 
     plot(go.Figure(data=data, layout=_layout), filename=_filename, auto_open=False)
 
+
+def genPlotlyDotPlot(X, Predicts, contour = None, _layout=None, _filename='', _colors=None, _markers=None):
+
+    if len(_filename) == 0:
+        raise ValueError('_filename must be filled')
+    traces = []
+    if contour is not None:
+
+        x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        x1 = [i for i in range(int(x1_min),int(x1_max))]
+        x2 = [i for i in range(int(x2_min), int(x2_max))]
+        traceContour = go.Contour(z=contour, opacity=0.4, autocontour=False,colorscale='Jet',
+                                  x0=x1_min, y0=x2_min,
+                                  #dx=1/100, dy=1/100
+                                  dx=(x1_max-x1_min)/float(len(contour[:,0])), dy=(x2_max-x2_min)/float(len(contour[:,1]))
+                                  )
+        traces.append(traceContour)
+    for idx, cl in enumerate(np.unique(Predicts)):
+        trace = go.Scatter(
+            x = X[Predicts == cl, 0],
+            y = X[Predicts == cl, 1],
+            mode = 'markers'
+
+        )
+
+        trace['name'] = "%d transformed feature" % idx
+        if _colors is not None:
+            trace['marker']['color'] = _colors[idx]
+
+        if _markers is not None:
+            trace['marker']['symbol'] = _markers[idx]
+
+        traces.append(trace)
+
+    plot(go.Figure(data=traces, layout=_layout), filename=_filename, auto_open=False)
+
+
+    pass
+
 def genPlotlyMultiLineChart(labels, datas, _layout=None, _filename='', width_size = 1, colors = None, names= None):
     if len(_filename) == 0:
         raise ValueError('_filename must be filled')
@@ -55,7 +92,6 @@ def genPlotlyMultiLineChart(labels, datas, _layout=None, _filename='', width_siz
         if names is not None:
             trace['name'] = names[i]
         traces.append(trace)
-    data = [traces]
 
     plot(go.Figure(data=traces, layout=_layout), filename=_filename, auto_open=False)
 
@@ -66,7 +102,6 @@ def gen_params_prec_recall_curve(params, precs_all, precs_selected,
                         subplot_titles=('Precision',
                                         'Recalls',
                                         'F1-Score',))
-
 
     trace_precs_all = go.Scatter(
         x=params, y=precs_all,
@@ -81,7 +116,6 @@ def gen_params_prec_recall_curve(params, precs_all, precs_selected,
         marker=dict(color="blue", ),
         name="Selected"
     )
-
 
     trace_rec_all = go.Scatter(
         x=params, y=recalls_all,
